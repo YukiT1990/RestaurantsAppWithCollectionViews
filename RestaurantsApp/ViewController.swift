@@ -20,7 +20,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         Restaurant(name: "Maya", image: UIImage(named: "maya"), type: Restaurant.CuisineType.Indian, mealTime: [Restaurant.MealTime.breakfast, Restaurant.MealTime.lunch, Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium),
         Restaurant(name: "Afu", image: UIImage(named: "afu"), type: Restaurant.CuisineType.Chinese, mealTime: [Restaurant.MealTime.lunch, Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.low),
         Restaurant(name: "Hanmaru", image: UIImage(named: "hanmaru"), type: Restaurant.CuisineType.Korean, mealTime: [Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium),
-        Restaurant(name: "Cala Carmen", image: UIImage(named: "calaCarmen"), type: Restaurant.CuisineType.Spanish, mealTime: [Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium)
+        Restaurant(name: "Cala Carmen", image: UIImage(named: "calaCarmen"), type: Restaurant.CuisineType.Spanish, mealTime: [Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium),
+        // alter
+        Restaurant(name: "KRAL", image: UIImage(named: "kral"), type: Restaurant.CuisineType.Turkish, mealTime: [Restaurant.MealTime.lunch], cost: Restaurant.PriceRange.medium),
+        Restaurant(name: "Matryoshka", image: UIImage(named: "matryoshka"), type: Restaurant.CuisineType.Russian, mealTime: [Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium),
+        Restaurant(name: "Tsukiji Aozora Sandaime", image: UIImage(named: "tsukiji"), type: Restaurant.CuisineType.Japanese, mealTime: [Restaurant.MealTime.lunch, Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.high),
+        Restaurant(name: "Tasuke", image: UIImage(named: "tasuke"), type: Restaurant.CuisineType.Japanese, mealTime: [Restaurant.MealTime.lunch, Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium),
+        Restaurant(name: "Chinese Cafe Eight Akasaka", image: UIImage(named: "eightAkasaka"), type: Restaurant.CuisineType.Chinese, mealTime: [Restaurant.MealTime.lunch, Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium)
     ]
     
     var sortedRestaurants: [Restaurant] = []
@@ -50,6 +56,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     let collectionView1: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.itemSize = CGSize(width: 100, height: 40)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.frame.size.height = layout.itemSize.height
         layout.scrollDirection = .horizontal
@@ -249,6 +256,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let section2 = NSCollectionLayoutSection(group: group2)
 
         section2.interGroupSpacing = spacing
+        
 
         return UICollectionViewCompositionalLayout(section: section2)
         

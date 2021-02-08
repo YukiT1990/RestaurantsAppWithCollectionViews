@@ -18,6 +18,8 @@ struct Restaurant: Hashable {
         case Spanish = "Spanish"
         case Indian = "Indian"
         case Chinese = "Chinese"
+        case Turkish = "Turkish"
+        case Russian = "Russian"
     }
     
     enum MealTime: String {
