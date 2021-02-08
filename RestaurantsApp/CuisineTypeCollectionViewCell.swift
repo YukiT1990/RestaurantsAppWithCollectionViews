@@ -15,6 +15,8 @@ class CuisineTypeCollectionViewCell: UICollectionViewCell {
         lb.backgroundColor = .white
         lb.textColor = UIColor(hex: "#3399ff")
         lb.textAlignment = .center
+        lb.layer.cornerRadius = 5
+        lb.clipsToBounds = true
         return lb
     }()
     

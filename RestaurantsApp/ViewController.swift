@@ -55,7 +55,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     // collectionViews
     let collectionView1: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 100, height: 40)
+        layout.itemSize = CGSize(width: 100, height: 35)
         layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         cv.frame.size.height = layout.itemSize.height
@@ -123,7 +123,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             collectionViewsContainerSV.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionViewsContainerSV.widthAnchor.constraint(equalTo: view.widthAnchor),
 
-            collectionView1.heightAnchor.constraint(equalToConstant: 40)
+            collectionView1.heightAnchor.constraint(equalToConstant: 35)
         ])
         
         self.navigationItem.title = "My Restaurants"
