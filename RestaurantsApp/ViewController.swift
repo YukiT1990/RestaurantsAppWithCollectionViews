@@ -69,7 +69,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return cv
     }()
     private let collectionView1Identifier = "CuisineTypeCell"
-    private let collectionView2Identifier = "RestaurantCell"
+    private let collectionView2IdentifierGeneral = "RestaurantCellGeneral"
+    private let collectionView2IdentifierLinear = "RestaurantCellLinear"
+    var generalLayout: Bool = false
     
 
     
@@ -85,7 +87,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         for each in sortedCuisineTypeArray {
         cuisineTypeStringArray.append(each.rawValue)
         }
-//        print("cuisineTypeStringArray \(cuisineTypeStringArray)")
     }
     
     func createLayout() {
@@ -111,12 +112,20 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         // Register cell classes
         collectionView1.register(CuisineTypeCollectionViewCell.self, forCellWithReuseIdentifier: collectionView1Identifier)
-        collectionView2.register(BasicCollectionViewCell.self, forCellWithReuseIdentifier: collectionView2Identifier)
-
+        collectionView2.register(BasicCollectionViewCell.self, forCellWithReuseIdentifier: collectionView2IdentifierGeneral)
+        // linearLayout
+        collectionView2.register(LinearLayoutCollectionViewCell.self, forCellWithReuseIdentifier: collectionView2IdentifierLinear)
+        
+        // Set layout
+        collectionView2.setCollectionViewLayout(generateLayoutForRestaurants(), animated: true)
+        generalLayout = true
+        
+        // Add subviews
         self.view.addSubview(collectionViewsContainerSV)
         collectionViewsContainerSV.addArrangedSubview(collectionView1)
         collectionViewsContainerSV.addArrangedSubview(collectionView2)
         
+        // Constraints
         NSLayoutConstraint.activate([
             collectionViewsContainerSV.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             collectionViewsContainerSV.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -126,12 +135,38 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             collectionView1.heightAnchor.constraint(equalToConstant: 35)
         ])
         
+        // Navigation bar
         self.navigationItem.title = "My Restaurants"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.barTintColor = UIColor(hex: "#3399ff")
-        
-        // set layout
-        collectionView2.setCollectionViewLayout(generateLayoutForRestaurants(), animated: true)
+//        let customFont = UIFont(name: "Arial", size: 40.0)!
+//        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: customFont], for: .normal)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "＝", style: .plain, target: self, action: #selector(changeLayout))
+    }
+    
+    
+    @objc func changeLayout() {
+        if generalLayout {
+            // when generalLayout
+            // change to linearLayout
+            collectionView2.setCollectionViewLayout(linearLayoutForRestaurants(), animated: true)
+//            collectionView2.register(LinearLayoutCollectionViewCell.self, forCellWithReuseIdentifier: collectionView2IdentifierLinear)
+            
+            navigationItem.rightBarButtonItem?.title = "◻︎"
+            generalLayout = false
+        } else {
+            // when linearLayout
+            // change to generalLayout
+            collectionView2.setCollectionViewLayout(generateLayoutForRestaurants(), animated: true)
+//            collectionView2.register(BasicCollectionViewCell.self, forCellWithReuseIdentifier: collectionView2IdentifierGeneral)
+            
+            navigationItem.rightBarButtonItem?.title = "＝"
+            generalLayout = true
+        }
+//        collectionView2.delegate = self
+//        collectionView2.dataSource = self
+//        collectionView2.reloadData()
+//        collectionView2.updateConstraints()
         
     }
     
@@ -155,21 +190,41 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             return cell1
         } else {
             // collectionView2
-            let cell2 = collectionView2.dequeueReusableCell(withReuseIdentifier: collectionView2Identifier, for: indexPath) as! BasicCollectionViewCell
-            cell2.nameLabel.text = filteredReataurants[indexPath.row].name
-            cell2.priceRangeLabel.text = filteredReataurants[indexPath.row].cost.rawValue
-            cell2.imageContainer.contentMode =  UIView.ContentMode.scaleAspectFill
-            cell2.imageContainer.image = filteredReataurants[indexPath.row].image
+            if generalLayout {
+                // generalLayout
+                let cell2 = collectionView2.dequeueReusableCell(withReuseIdentifier: collectionView2IdentifierGeneral, for: indexPath) as! BasicCollectionViewCell
+                cell2.nameLabel.text = filteredReataurants[indexPath.row].name
+                cell2.priceRangeLabel.text = filteredReataurants[indexPath.row].cost.rawValue
+                cell2.imageContainer.contentMode =  UIView.ContentMode.scaleAspectFill
+                cell2.imageContainer.image = filteredReataurants[indexPath.row].image
 
-            let mealTimeArrayTemp: [Restaurant.MealTime] = filteredReataurants[indexPath.row].mealTime
-            var mealTimeStringArrayTemp: [String] = []
-            for each in mealTimeArrayTemp {
-                mealTimeStringArrayTemp.append(each.rawValue)
+                let mealTimeArrayTemp: [Restaurant.MealTime] = filteredReataurants[indexPath.row].mealTime
+                var mealTimeStringArrayTemp: [String] = []
+                for each in mealTimeArrayTemp {
+                    mealTimeStringArrayTemp.append(each.rawValue)
+                }
+
+                cell2.descriptionLabel.text = "\(filteredReataurants[indexPath.row].type) - \(mealTimeStringArrayTemp.joined(separator: ", "))"
+                
+                return cell2
+            } else {
+                // linearLayout
+                let cell2 = collectionView2.dequeueReusableCell(withReuseIdentifier: collectionView2IdentifierLinear, for: indexPath) as! LinearLayoutCollectionViewCell
+                cell2.nameLabel.text = filteredReataurants[indexPath.row].name
+                cell2.priceRangeLabel.text = filteredReataurants[indexPath.row].cost.rawValue
+                cell2.imageContainer.contentMode =  UIView.ContentMode.scaleAspectFill
+                cell2.imageContainer.image = filteredReataurants[indexPath.row].image
+
+                let mealTimeArrayTemp: [Restaurant.MealTime] = filteredReataurants[indexPath.row].mealTime
+                var mealTimeStringArrayTemp: [String] = []
+                for each in mealTimeArrayTemp {
+                    mealTimeStringArrayTemp.append(each.rawValue)
+                }
+
+                cell2.descriptionLabel.text = "\(filteredReataurants[indexPath.row].type) - \(mealTimeStringArrayTemp.joined(separator: ", "))"
+                
+                return cell2
             }
-
-            cell2.descriptionLabel.text = "\(filteredReataurants[indexPath.row].type) - \(mealTimeStringArrayTemp.joined(separator: ", "))"
-            
-            return cell2
         }
     }
     
@@ -260,6 +315,28 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
         return UICollectionViewCompositionalLayout(section: section2)
         
+    }
+    
+    private func linearLayoutForRestaurants() -> UICollectionViewLayout  {
+        let spacing: CGFloat = 5
+        // for collectionView2
+        // 1. define item
+        let itemSize2 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
+        let item2 = NSCollectionLayoutItem(layoutSize: itemSize2)
+        item2.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: spacing, bottom: 0, trailing: spacing)
+        
+        // 2. define group
+        let groupSize2 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(0.2))
+        let group2 = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize2, subitem: item2, count: 1)
+        group2.contentInsets = NSDirectionalEdgeInsets(top: spacing, leading: 0, bottom: 0, trailing: 0)
+
+        // 3. define section
+        let section2 = NSCollectionLayoutSection(group: group2)
+
+        section2.interGroupSpacing = spacing
+        
+
+        return UICollectionViewCompositionalLayout(section: section2)
     }
 }
 
