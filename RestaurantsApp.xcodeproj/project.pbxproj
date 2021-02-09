@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		618F832F25D271180008229A /* LinearLayoutCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 618F832E25D271180008229A /* LinearLayoutCollectionViewCell.swift */; };
 		61B7F2EB25CF746600BAA2A2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B7F2EA25CF746600BAA2A2 /* AppDelegate.swift */; };
 		61B7F2ED25CF746600BAA2A2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B7F2EC25CF746600BAA2A2 /* SceneDelegate.swift */; };
 		61B7F2EF25CF746600BAA2A2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B7F2EE25CF746600BAA2A2 /* ViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		618F832E25D271180008229A /* LinearLayoutCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinearLayoutCollectionViewCell.swift; sourceTree = "<group>"; };
 		61B7F2E725CF746500BAA2A2 /* RestaurantsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RestaurantsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		61B7F2EA25CF746600BAA2A2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		61B7F2EC25CF746600BAA2A2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,7 +68,6 @@
 			children = (
 				61B7F2EA25CF746600BAA2A2 /* AppDelegate.swift */,
 				61B7F2EC25CF746600BAA2A2 /* SceneDelegate.swift */,
-				61B7F30525CF86CE00BAA2A2 /* BasicCollectionViewCell.swift */,
 				61B7F2EE25CF746600BAA2A2 /* ViewController.swift */,
 				61B7F2F025CF746600BAA2A2 /* Main.storyboard */,
 				61B7F2F325CF746600BAA2A2 /* Assets.xcassets */,
@@ -75,6 +76,8 @@
 				61B7F2F525CF746600BAA2A2 /* LaunchScreen.storyboard */,
 				61B7F2F825CF746600BAA2A2 /* Info.plist */,
 				61B7F31125D0055300BAA2A2 /* CuisineTypeCollectionViewCell.swift */,
+				61B7F30525CF86CE00BAA2A2 /* BasicCollectionViewCell.swift */,
+				618F832E25D271180008229A /* LinearLayoutCollectionViewCell.swift */,
 			);
 			path = RestaurantsApp;
 			sourceTree = "<group>";
@@ -156,6 +159,7 @@
 				61B7F2EB25CF746600BAA2A2 /* AppDelegate.swift in Sources */,
 				61B7F2ED25CF746600BAA2A2 /* SceneDelegate.swift in Sources */,
 				61B7F31225D0055300BAA2A2 /* CuisineTypeCollectionViewCell.swift in Sources */,
+				618F832F25D271180008229A /* LinearLayoutCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
