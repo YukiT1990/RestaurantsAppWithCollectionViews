@@ -73,8 +73,6 @@ class LinearLayoutCollectionViewCell: UICollectionViewCell {
         nameLabel.textColor = .black
         
         NSLayoutConstraint.activate([
-            contentViewSV.topAnchor.constraint(equalTo: contentView.topAnchor),
-            contentViewSV.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             contentViewSV.heightAnchor.constraint(equalTo: contentView.heightAnchor),
             contentViewSV.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             

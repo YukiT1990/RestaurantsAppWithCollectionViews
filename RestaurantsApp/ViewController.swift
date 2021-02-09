@@ -87,6 +87,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         for each in sortedCuisineTypeArray {
         cuisineTypeStringArray.append(each.rawValue)
         }
+        print("viewDidLoad")
     }
     
     func createLayout() {
@@ -149,25 +150,19 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if generalLayout {
             // when generalLayout
             // change to linearLayout
-            collectionView2.setCollectionViewLayout(linearLayoutForRestaurants(), animated: true)
-//            collectionView2.register(LinearLayoutCollectionViewCell.self, forCellWithReuseIdentifier: collectionView2IdentifierLinear)
+            collectionView2.setCollectionViewLayout(linearLayoutForRestaurants(), animated: false)
             
             navigationItem.rightBarButtonItem?.title = "◻︎"
             generalLayout = false
         } else {
             // when linearLayout
             // change to generalLayout
-            collectionView2.setCollectionViewLayout(generateLayoutForRestaurants(), animated: true)
-//            collectionView2.register(BasicCollectionViewCell.self, forCellWithReuseIdentifier: collectionView2IdentifierGeneral)
+            collectionView2.setCollectionViewLayout(generateLayoutForRestaurants(), animated: false)
             
             navigationItem.rightBarButtonItem?.title = "＝"
             generalLayout = true
         }
-//        collectionView2.delegate = self
-//        collectionView2.dataSource = self
-//        collectionView2.reloadData()
-//        collectionView2.updateConstraints()
-        
+        collectionView2.reloadData()
     }
     
     // numberOfItemsInSection function
