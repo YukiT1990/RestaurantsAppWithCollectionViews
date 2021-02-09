@@ -31,10 +31,8 @@ class DetailViewController: UIViewController {
         let bt = UIButton()
         bt.translatesAutoresizingMaskIntoConstraints = false
         bt.setTitle("◁", for: .normal)
-//        bt.backgroundColor = UIColor(hex: "#3399ff")
         bt.setTitleColor(UIColor(hex: "#0047b3"), for: .normal)
         bt.addTarget(self, action: #selector(dismissButtonTapped(_:)), for: .touchUpInside)
-//        bt.backgroundColor = .red
         bt.frame.size.width = 40
         bt.frame.size.height = 40
         return bt
@@ -71,7 +69,6 @@ class DetailViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Cuisine Type"
         lb.textAlignment = .center
-//        lb.textColor = UIColor(hex: "#858EC5")
         lb.font = UIFont.systemFont(ofSize: 24)
         return lb
     }()
@@ -80,7 +77,6 @@ class DetailViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Cost"
         lb.textAlignment = .center
-//        lb.textColor = UIColor(hex: "#858EC5")
         lb.font = UIFont.systemFont(ofSize: 24)
         return lb
     }()
@@ -89,7 +85,6 @@ class DetailViewController: UIViewController {
         lb.translatesAutoresizingMaskIntoConstraints = false
         lb.text = "Meal Time"
         lb.textAlignment = .center
-//        lb.textColor = UIColor(hex: "#858EC5")
         lb.backgroundColor = .white
         lb.font = UIFont.systemFont(ofSize: 24)
         return lb
@@ -108,10 +103,6 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         createLayout()
-        
-        print("targetRestaurant \(targetRestaurant ?? defaultRestaurant)")
-
-        // Do any additional setup after loading the view.
     }
     
 
