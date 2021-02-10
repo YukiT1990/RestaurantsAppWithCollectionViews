@@ -41,6 +41,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var sortedCuisineTypeArray: [Restaurant.CuisineType] = []
     var cuisineTypeStringArray: [String] = []
     
+    var mealTimeArrayRestaurantType: [Restaurant.MealTime] = [Restaurant.MealTime.breakfast, Restaurant.MealTime.lunch, Restaurant.MealTime.dinner]
     let mealTimeArray: [String] = ["Breakfast", "Lunch", "Dinner"]
     
     // stackView
@@ -169,41 +170,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "＝", style: .done, target: self, action: #selector(changeRestaurantsLayout))
         navigationItem.rightBarButtonItem?.tintColor = UIColor(hex: "#0047b3")
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "+", style: .done, target: self, action: #selector(advancedSearch))
-        navigationItem.leftBarButtonItem?.tintColor = UIColor(hex: "#0047b3")
+        // Disabled
+        navigationItem.searchController = searchController
+        searchController.searchBar.barTintColor = UIColor(hex: "#3399ff")
+        searchController.searchBar.tintColor = UIColor(hex: "#3399ff")
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController?.searchBar.isHidden = true
         
-//        navigationItem.searchController = searchController
-//        searchController.searchBar.barTintColor = UIColor(hex: "#3399ff")
-//        searchController.searchBar.tintColor = UIColor(hex: "#3399ff")
-//        searchController.searchResultsUpdater = self
-//        searchController.obscuresBackgroundDuringPresentation = false
-//        navigationItem.searchController?.searchBar.isHidden = true
-        
-//        navigationItem.searchController = nil
-    }
-    
-    @objc func advancedSearch() {
-        if isAdvancedSearchState {
-            // not advanced search state
-            isAdvancedSearchState = false
-            
-//            navigationItem.searchController = nil
-            
-            
-//            navigationItem.searchController?.searchBar.isHidden = true
-        } else {
-            // advanced search state
-            isAdvancedSearchState = true
-            
-//            navigationItem.searchController = searchController
-//            searchController.searchBar.barTintColor = UIColor(hex: "#3399ff")
-//            searchController.searchBar.tintColor = UIColor(hex: "#3399ff")
-//            searchController.searchResultsUpdater = self
-//            searchController.obscuresBackgroundDuringPresentation = false
-//            view.layoutIfNeeded()
-            
-//            navigationItem.searchController?.searchBar.isHidden = false
-        }
+        // Disabled as the background color becomes gray
+        navigationItem.searchController = nil
     }
     
     @objc func changeRestaurantsLayout() {
@@ -230,9 +206,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if collectionView == self.collectionView1 {
             // collectionView1
             return cuisineTypeStringArray.count
-        } else {
+        } else if collectionView == self.collectionView2 {
             // collectionView2
             return filteredReataurants.count
+        } else {
+            // collectionView3
+            return mealTimeArray.count
         }
     }
     
@@ -243,7 +222,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             let cell1 = collectionView1.dequeueReusableCell(withReuseIdentifier: collectionView1Identifier, for: indexPath) as! CuisineTypeCollectionViewCell
             cell1.cuisineTypeLabel.text = cuisineTypeStringArray[indexPath.row]
             return cell1
-        } else {
+        } else if collectionView == collectionView2 {
             // collectionView2
             if generalLayout {
                 // generalLayout
@@ -280,45 +259,77 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 
                 return cell2
             }
+        } else {
+            // collectionView3
+            let cell3 = collectionView3.dequeueReusableCell(withReuseIdentifier: collectionView3Identifier, for: indexPath) as! CuisineTypeCollectionViewCell
+            cell3.cuisineTypeLabel.text = mealTimeArray[indexPath.row]
+            return cell3
         }
     }
     
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var filteredReataurantsTemp1: [Restaurant] = sortedRestaurants
+        var filteredReataurantsTemp3: [Restaurant] = sortedRestaurants
+
+        var selectedCategories: [Restaurant.CuisineType] = []
+        var selectedCategoriesString: [String] = []
+        var selectedRestaurants1: [Restaurant] = []
+        
+        var selectedMealTimes: [Restaurant.MealTime] = []
+        var selectedMealTimesString: [String] = []
+        var selectedRestaurants3: [Restaurant] = []
+        
         if collectionView == self.collectionView1 {
+            filteredReataurantsTemp1 = []
+            filteredReataurantsTemp3 = []
             // collectionView1
             collectionView1.allowsMultipleSelection = true
-//            print("cuisine type \(cuisineTypeStringArray[indexPath.row])")
-//            print(collectionView1.indexPathsForSelectedItems!)
             
             if let cell = collectionView.cellForItem(at: indexPath) as? CuisineTypeCollectionViewCell {
                 
-                var selectedCategories: [Restaurant.CuisineType] = []
-                var selectedCategoriesString: [String] = []
-                var selectedRestaurants: [Restaurant] = []
-                filteredReataurants = []
-                for index in collectionView1.indexPathsForSelectedItems! {
-                    selectedCategories.append(sortedCuisineTypeArray[index[1]])
-                    selectedCategoriesString.append(sortedCuisineTypeArray[index[1]].rawValue)
-                }
-                for category in selectedCategories {
-                    selectedRestaurants = restaurants.filter({
-                        $0.type == category
-                    })
-                    filteredReataurants.append(contentsOf: selectedRestaurants)
+                if !collectionView3.indexPathsForSelectedItems!.isEmpty {
+                    for index in collectionView3.indexPathsForSelectedItems! {
+                        selectedMealTimes.append(mealTimeArrayRestaurantType[index[1]])
+                        selectedMealTimesString.append(mealTimeArrayRestaurantType[index[1]].rawValue)
+                    }
+                    for mealTime in selectedMealTimes {
+                        selectedRestaurants3 = restaurants.filter({
+                            $0.mealTime.contains(mealTime)
+                        })
+                        for eachRest in selectedRestaurants3 {
+                            if !filteredReataurantsTemp3.contains(eachRest) {
+                                filteredReataurantsTemp3.append(eachRest)
+                            }
+                        }
+                    }
+                } else {
+                    filteredReataurantsTemp3 = sortedRestaurants
                 }
                 
                 if collectionView1.indexPathsForSelectedItems!.isEmpty {
-                    filteredReataurants = sortedRestaurants
+                    filteredReataurants = filteredReataurantsTemp3
+                } else {
+                    for index in collectionView1.indexPathsForSelectedItems! {
+                        selectedCategories.append(sortedCuisineTypeArray[index[1]])
+                        selectedCategoriesString.append(sortedCuisineTypeArray[index[1]].rawValue)
+                    }
+                    for category in selectedCategories {
+                        selectedRestaurants1 = filteredReataurantsTemp3.filter({
+                            $0.type == category
+                        })
+                        filteredReataurantsTemp1.append(contentsOf: selectedRestaurants1)
+                    }
+                    filteredReataurants = filteredReataurantsTemp1
                 }
-                
+                // change cell color if selected
                 if cell.isSelected {
                     cell.cuisineTypeLabel.backgroundColor = UIColor(hex: "#3399ff")
                     cell.cuisineTypeLabel.textColor = .white
                 }
             }
-            collectionView2.reloadData()
-        } else {
+            
+        } else if collectionView == self.collectionView2 {
             // collectionView2
             let selectedRestaurant: Restaurant = filteredReataurants[indexPath.row]
             print(selectedRestaurant)
@@ -326,36 +337,181 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             nextView.modalTransitionStyle = .coverVertical
             nextView.targetRestaurant = selectedRestaurant
             present(nextView, animated: true, completion: nil)
+        } else {
+            // collectionView3
+            filteredReataurantsTemp1 = []
+            filteredReataurantsTemp3 = []
+            collectionView3.allowsMultipleSelection = true
+            
+            if let cell = collectionView.cellForItem(at: indexPath) as? CuisineTypeCollectionViewCell {
+                
+                if !collectionView1.indexPathsForSelectedItems!.isEmpty {
+                    for index in collectionView1.indexPathsForSelectedItems! {
+                        selectedCategories.append(sortedCuisineTypeArray[index[1]])
+                        selectedCategoriesString.append(sortedCuisineTypeArray[index[1]].rawValue)
+                    }
+                    for category in selectedCategories {
+                        selectedRestaurants1 = restaurants.filter({
+                            $0.type == category
+                        })
+                        filteredReataurantsTemp1.append(contentsOf: selectedRestaurants1)
+                    }
+                } else {
+                    // collectionView1 is not selected
+                    filteredReataurantsTemp1 = sortedRestaurants
+                }
+                
+                if collectionView3.indexPathsForSelectedItems!.isEmpty {
+                    filteredReataurants = filteredReataurantsTemp1
+                } else {
+                    for index in collectionView3.indexPathsForSelectedItems! {
+                        selectedMealTimes.append(mealTimeArrayRestaurantType[index[1]])
+                        selectedMealTimesString.append(mealTimeArrayRestaurantType[index[1]].rawValue)
+                    }
+                    for mealTime in selectedMealTimes {
+                        selectedRestaurants3 = filteredReataurantsTemp1.filter({
+                            $0.mealTime.contains(mealTime)
+                        })
+                        for eachRest in selectedRestaurants3 {
+                            if !filteredReataurantsTemp3.contains(eachRest) {
+                                filteredReataurantsTemp3.append(eachRest)
+                            }
+                        }
+                    }
+                    filteredReataurants = filteredReataurantsTemp3
+                }
+                // change cell color if selected
+                if cell.isSelected {
+                    cell.cuisineTypeLabel.backgroundColor = UIColor(hex: "#3399ff")
+                    cell.cuisineTypeLabel.textColor = .white
+                }
+            }
         }
-        
+        filteredReataurants = filteredReataurants.sorted { $0.name < $1.name }
+        print("collectionView1 \(collectionView1.indexPathsForSelectedItems!)")
+        print("collectionView3 \(collectionView3.indexPathsForSelectedItems!)")
+        collectionView2.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        var filteredReataurantsTemp1: [Restaurant] = sortedRestaurants
+        var filteredReataurantsTemp3: [Restaurant] = sortedRestaurants
+
+        var selectedCategories: [Restaurant.CuisineType] = []
+        var selectedCategoriesString: [String] = []
+        var selectedRestaurants1: [Restaurant] = []
+
+        var selectedMealTimes: [Restaurant.MealTime] = []
+        var selectedMealTimesString: [String] = []
+        var selectedRestaurants3: [Restaurant] = []
+        
         if collectionView == self.collectionView1 {
+            filteredReataurantsTemp1 = []
+            filteredReataurantsTemp3 = []
+            // collectionView1
             collectionView1.allowsMultipleSelection = true
-//            print("deselected cuisine type \(cuisineTypeStringArray[indexPath.row])")
+            
             if let cell = collectionView.cellForItem(at: indexPath) as? CuisineTypeCollectionViewCell {
+                
+                if !collectionView3.indexPathsForSelectedItems!.isEmpty {
+                    for index in collectionView3.indexPathsForSelectedItems! {
+                        selectedMealTimes.append(mealTimeArrayRestaurantType[index[1]])
+                        selectedMealTimesString.append(mealTimeArrayRestaurantType[index[1]].rawValue)
+                    }
+                    for mealTime in selectedMealTimes {
+                        selectedRestaurants3 = restaurants.filter({
+                            $0.mealTime.contains(mealTime)
+                        })
+                        for eachRest in selectedRestaurants3 {
+                            if !filteredReataurantsTemp3.contains(eachRest) {
+                                filteredReataurantsTemp3.append(eachRest)
+                            }
+                        }
+                    }
+                } else {
+                    filteredReataurantsTemp3 = sortedRestaurants
+                }
+                
+                if collectionView1.indexPathsForSelectedItems!.isEmpty {
+                    filteredReataurants = filteredReataurantsTemp3
+                } else {
+                    for index in collectionView1.indexPathsForSelectedItems! {
+                        selectedCategories.append(sortedCuisineTypeArray[index[1]])
+                        selectedCategoriesString.append(sortedCuisineTypeArray[index[1]].rawValue)
+                    }
+                    for category in selectedCategories {
+                        selectedRestaurants1 = filteredReataurantsTemp3.filter({
+                            $0.type == category
+                        })
+                        filteredReataurantsTemp1.append(contentsOf: selectedRestaurants1)
+                    }
+                    filteredReataurants = filteredReataurantsTemp1
+                }
+                // return cell color to the original
                 cell.cuisineTypeLabel.backgroundColor = .white
                 cell.cuisineTypeLabel.textColor = UIColor(hex: "#3399ff")
             }
-            var selectedCategories: [Restaurant.CuisineType] = []
-            var selectedCategoriesString: [String] = []
-            var selectedRestaurants: [Restaurant] = []
-            filteredReataurants = []
-            for index in collectionView1.indexPathsForSelectedItems! {
-                selectedCategories.append(sortedCuisineTypeArray[index[1]])
-                selectedCategoriesString.append(sortedCuisineTypeArray[index[1]].rawValue)
-            }
-            for category in selectedCategories {
-                selectedRestaurants = restaurants.filter({
-                    $0.type == category
-                })
-                filteredReataurants.append(contentsOf: selectedRestaurants)
-            }
-            if collectionView1.indexPathsForSelectedItems!.isEmpty {
-                filteredReataurants = sortedRestaurants
+            
+            
+        } else if collectionView == self.collectionView2 {
+            // collectionView2
+            
+        } else {
+            // collectionView3
+            filteredReataurantsTemp1 = []
+            filteredReataurantsTemp3 = []
+            collectionView3.allowsMultipleSelection = true
+            
+            if let cell = collectionView.cellForItem(at: indexPath) as? CuisineTypeCollectionViewCell {
+                
+                if !collectionView1.indexPathsForSelectedItems!.isEmpty {
+                    for index in collectionView1.indexPathsForSelectedItems! {
+                        selectedCategories.append(sortedCuisineTypeArray[index[1]])
+                        selectedCategoriesString.append(sortedCuisineTypeArray[index[1]].rawValue)
+                    }
+                    for category in selectedCategories {
+                        selectedRestaurants1 = restaurants.filter({
+                            $0.type == category
+                        })
+                        filteredReataurantsTemp1.append(contentsOf: selectedRestaurants1)
+                    }
+                } else {
+                    // collectionView1 is not selected
+                    filteredReataurantsTemp1 = sortedRestaurants
+                }
+                
+                if collectionView3.indexPathsForSelectedItems!.isEmpty {
+                    filteredReataurants = filteredReataurantsTemp1
+                } else {
+                    for index in collectionView3.indexPathsForSelectedItems! {
+                        selectedMealTimes.append(mealTimeArrayRestaurantType[index[1]])
+                        selectedMealTimesString.append(mealTimeArrayRestaurantType[index[1]].rawValue)
+                    }
+                    for mealTime in selectedMealTimes {
+                        selectedRestaurants3 = filteredReataurantsTemp1.filter({
+                            $0.mealTime.contains(mealTime)
+                        })
+                        for eachRest in selectedRestaurants3 {
+                            if !filteredReataurantsTemp3.contains(eachRest) {
+                                filteredReataurantsTemp3.append(eachRest)
+                            }
+                        }
+                    }
+                    filteredReataurants = filteredReataurantsTemp3
+                }
+                // return cell color to the original
+                cell.cuisineTypeLabel.backgroundColor = .white
+                cell.cuisineTypeLabel.textColor = UIColor(hex: "#3399ff")
             }
         }
+
+        // if nothing is selected
+        if collectionView1.indexPathsForSelectedItems!.isEmpty && collectionView3.indexPathsForSelectedItems!.isEmpty{
+            filteredReataurants = sortedRestaurants
+        }
+        filteredReataurants = filteredReataurants.sorted { $0.name < $1.name }
+        print("collectionView1 \(collectionView1.indexPathsForSelectedItems!)")
+        print("collectionView3 \(collectionView3.indexPathsForSelectedItems!)")
         collectionView2.reloadData()
     }
     
@@ -374,9 +530,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
         // 3. define section
         let section2 = NSCollectionLayoutSection(group: group2)
-
         section2.interGroupSpacing = spacing
-        
 
         return UICollectionViewCompositionalLayout(section: section2)
         
@@ -397,10 +551,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
 
         // 3. define section
         let section2 = NSCollectionLayoutSection(group: group2)
-
         section2.interGroupSpacing = spacing
         
-
         return UICollectionViewCompositionalLayout(section: section2)
     }
 }
