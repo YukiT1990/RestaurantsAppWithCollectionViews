@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UISearchResultsUpdating {
     
     // data
     private let restaurants: [Restaurant] = [
@@ -21,7 +21,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         Restaurant(name: "Afu", image: UIImage(named: "afu"), type: Restaurant.CuisineType.Chinese, mealTime: [Restaurant.MealTime.lunch, Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.low),
         Restaurant(name: "Hanmaru", image: UIImage(named: "hanmaru"), type: Restaurant.CuisineType.Korean, mealTime: [Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium),
         Restaurant(name: "Cala Carmen", image: UIImage(named: "calaCarmen"), type: Restaurant.CuisineType.Spanish, mealTime: [Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium),
-        // alter
         Restaurant(name: "KRAL", image: UIImage(named: "kral"), type: Restaurant.CuisineType.Turkish, mealTime: [Restaurant.MealTime.lunch], cost: Restaurant.PriceRange.medium),
         Restaurant(name: "Matryoshka", image: UIImage(named: "matryoshka"), type: Restaurant.CuisineType.Russian, mealTime: [Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.medium),
         Restaurant(name: "Tsukiji Aozora Sandaime", image: UIImage(named: "tsukiji"), type: Restaurant.CuisineType.Japanese, mealTime: [Restaurant.MealTime.lunch, Restaurant.MealTime.dinner], cost: Restaurant.PriceRange.high),
@@ -72,8 +71,21 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     private let collectionView2IdentifierGeneral = "RestaurantCellGeneral"
     private let collectionView2IdentifierLinear = "RestaurantCellLinear"
     var generalLayout: Bool = false
-    
+    var isAdvancedSearchState: Bool = false
+    // searchController
+    let searchController = UISearchController()
 
+    func updateSearchResults(for searchController: UISearchController) {
+        if let searchString = searchController.searchBar.text, !searchString.isEmpty {
+            filteredReataurants = sortedRestaurants.filter({
+                $0.name.localizedCaseInsensitiveContains(searchString)
+            })
+        } else {
+            filteredReataurants = sortedRestaurants
+        }
+
+        collectionView2.reloadData()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,10 +111,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 return (view.window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0.0) +
                     (self.navigationController?.navigationBar.frame.height ?? 0.0)
             }
-        let collectionView1Height: CGFloat = 100
-        let space: CGFloat = 10
-        collectionView1.frame = CGRect(x: 0, y: topbarHeight + space, width: view.frame.width, height: collectionView1Height)
-        collectionView2.frame = CGRect(x: 0, y: topbarHeight + collectionView1Height + space * 2, width: view.frame.width, height: view.frame.height - collectionView1Height - 45)
         
         collectionView1.delegate = self
         collectionView2.delegate = self
@@ -140,12 +148,37 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.barTintColor = UIColor(hex: "#3399ff")
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "＝", style: .done, target: self, action: #selector(changeLayout))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "＝", style: .done, target: self, action: #selector(changeRestaurantsLayout))
         navigationItem.rightBarButtonItem?.tintColor = UIColor(hex: "#0047b3")
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "+", style: .done, target: self, action: #selector(advancedSearch))
+        navigationItem.leftBarButtonItem?.tintColor = UIColor(hex: "#0047b3")
+        
+        navigationItem.searchController = searchController
+        searchController.searchBar.barTintColor = UIColor(hex: "#3399ff")
+        searchController.searchBar.tintColor = UIColor(hex: "#3399ff")
+        searchController.searchResultsUpdater = self
+        searchController.obscuresBackgroundDuringPresentation = false
+//        navigationItem.searchController?.searchBar.isHidden = true
+        
+        navigationItem.searchController = nil
     }
     
+    @objc func advancedSearch() {
+        if isAdvancedSearchState {
+            // not advanced search state
+            isAdvancedSearchState = false
+            
+//            navigationItem.searchController?.searchBar.isHidden = true
+        } else {
+            // advanced search state
+            isAdvancedSearchState = true
+            
+//            navigationItem.searchController?.searchBar.isHidden = false
+        }
+    }
     
-    @objc func changeLayout() {
+    @objc func changeRestaurantsLayout() {
         if generalLayout {
             // when generalLayout
             // change to linearLayout

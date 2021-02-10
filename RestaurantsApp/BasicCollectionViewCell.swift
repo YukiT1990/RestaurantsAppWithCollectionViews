@@ -64,6 +64,8 @@ class BasicCollectionViewCell: UICollectionViewCell {
         nameLabel.textColor = .black
         
         NSLayoutConstraint.activate([
+//            contentViewSV.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+//            contentViewSV.topAnchor.constraint(equalTo: contentView.topAnchor),
             contentViewSV.heightAnchor.constraint(equalTo: contentView.heightAnchor),
             contentViewSV.widthAnchor.constraint(equalTo: contentView.widthAnchor),
             
