@@ -87,7 +87,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         for each in sortedCuisineTypeArray {
         cuisineTypeStringArray.append(each.rawValue)
         }
-        print("viewDidLoad")
     }
     
     func createLayout() {
@@ -140,9 +139,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         self.navigationItem.title = "My Restaurants"
         navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
         navigationController?.navigationBar.barTintColor = UIColor(hex: "#3399ff")
-//        let customFont = UIFont(name: "Arial", size: 40.0)!
-//        UIBarButtonItem.appearance().setTitleTextAttributes([NSAttributedString.Key.font: customFont], for: .normal)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "＝", style: .plain, target: self, action: #selector(changeLayout))
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "＝", style: .done, target: self, action: #selector(changeLayout))
+        navigationItem.rightBarButtonItem?.tintColor = UIColor(hex: "#0047b3")
     }
     
     
@@ -226,6 +225,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView == self.collectionView1 {
+            // collectionView1
             collectionView1.allowsMultipleSelection = true
 //            print("cuisine type \(cuisineTypeStringArray[indexPath.row])")
 //            print(collectionView1.indexPathsForSelectedItems!)
@@ -256,8 +256,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                     cell.cuisineTypeLabel.textColor = .white
                 }
             }
+            collectionView2.reloadData()
+        } else {
+            // collectionView2
+            let selectedRestaurant: Restaurant = filteredReataurants[indexPath.row]
+            print(selectedRestaurant)
+            let nextView = DetailViewController()
+            nextView.modalTransitionStyle = .coverVertical
+            nextView.targetRestaurant = selectedRestaurant
+            present(nextView, animated: true, completion: nil)
         }
-        collectionView2.reloadData()
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {

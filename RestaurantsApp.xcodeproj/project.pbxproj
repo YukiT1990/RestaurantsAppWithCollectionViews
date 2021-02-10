@@ -18,6 +18,7 @@
 		61B7F30625CF86CE00BAA2A2 /* BasicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B7F30525CF86CE00BAA2A2 /* BasicCollectionViewCell.swift */; };
 		61B7F30D25CF923C00BAA2A2 /* UIColorHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B7F30C25CF923C00BAA2A2 /* UIColorHex.swift */; };
 		61B7F31225D0055300BAA2A2 /* CuisineTypeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B7F31125D0055300BAA2A2 /* CuisineTypeCollectionViewCell.swift */; };
+		61E9818925D33D90004931F0 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61E9818825D33D90004931F0 /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		61B7F30525CF86CE00BAA2A2 /* BasicCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewCell.swift; sourceTree = "<group>"; };
 		61B7F30C25CF923C00BAA2A2 /* UIColorHex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorHex.swift; sourceTree = "<group>"; };
 		61B7F31125D0055300BAA2A2 /* CuisineTypeCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CuisineTypeCollectionViewCell.swift; sourceTree = "<group>"; };
+		61E9818825D33D90004931F0 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				61B7F2EA25CF746600BAA2A2 /* AppDelegate.swift */,
 				61B7F2EC25CF746600BAA2A2 /* SceneDelegate.swift */,
 				61B7F2EE25CF746600BAA2A2 /* ViewController.swift */,
+				61E9818825D33D90004931F0 /* DetailViewController.swift */,
 				61B7F2F025CF746600BAA2A2 /* Main.storyboard */,
 				61B7F2F325CF746600BAA2A2 /* Assets.xcassets */,
 				61B7F30225CF7B6700BAA2A2 /* Restaurant.swift */,
@@ -152,6 +155,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61E9818925D33D90004931F0 /* DetailViewController.swift in Sources */,
 				61B7F30D25CF923C00BAA2A2 /* UIColorHex.swift in Sources */,
 				61B7F30325CF7B6700BAA2A2 /* Restaurant.swift in Sources */,
 				61B7F30625CF86CE00BAA2A2 /* BasicCollectionViewCell.swift in Sources */,
