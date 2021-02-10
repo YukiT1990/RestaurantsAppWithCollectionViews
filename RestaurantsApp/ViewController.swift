@@ -85,6 +85,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     private let collectionView3Identifier = "MealTimeCell"
     var generalLayout: Bool = false
     var isAdvancedSearchState: Bool = false
+    
     // searchController
     let searchController = UISearchController()
 
@@ -170,13 +171,12 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "＝", style: .done, target: self, action: #selector(changeRestaurantsLayout))
         navigationItem.rightBarButtonItem?.tintColor = UIColor(hex: "#0047b3")
         
-        // Disabled
+        // Search bar is disabled
         navigationItem.searchController = searchController
         searchController.searchBar.barTintColor = UIColor(hex: "#3399ff")
         searchController.searchBar.tintColor = UIColor(hex: "#3399ff")
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        navigationItem.searchController?.searchBar.isHidden = true
         
         // Disabled as the background color becomes gray
         navigationItem.searchController = nil
@@ -267,7 +267,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
-    
+    // When one of the cells in either collectionView selected
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         var filteredReataurantsTemp1: [Restaurant] = sortedRestaurants
         var filteredReataurantsTemp3: [Restaurant] = sortedRestaurants
@@ -314,6 +314,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                         selectedCategories.append(sortedCuisineTypeArray[index[1]])
                         selectedCategoriesString.append(sortedCuisineTypeArray[index[1]].rawValue)
                     }
+                    // "and filtering" (selected cuisine type) and (selected mealTime)
                     for category in selectedCategories {
                         selectedRestaurants1 = filteredReataurantsTemp3.filter({
                             $0.type == category
@@ -368,6 +369,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                         selectedMealTimes.append(mealTimeArrayRestaurantType[index[1]])
                         selectedMealTimesString.append(mealTimeArrayRestaurantType[index[1]].rawValue)
                     }
+                    // "and filtering" (selected cuisine type) and (selected mealTime)
                     for mealTime in selectedMealTimes {
                         selectedRestaurants3 = filteredReataurantsTemp1.filter({
                             $0.mealTime.contains(mealTime)
@@ -387,12 +389,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                 }
             }
         }
+        // alphabetical order
         filteredReataurants = filteredReataurants.sorted { $0.name < $1.name }
-        print("collectionView1 \(collectionView1.indexPathsForSelectedItems!)")
-        print("collectionView3 \(collectionView3.indexPathsForSelectedItems!)")
+        // for checking
+//        print("collectionView1 \(collectionView1.indexPathsForSelectedItems!)")
+//        print("collectionView3 \(collectionView3.indexPathsForSelectedItems!)")
         collectionView2.reloadData()
     }
     
+    // When one of the cells in either collectionView deselected
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         var filteredReataurantsTemp1: [Restaurant] = sortedRestaurants
         var filteredReataurantsTemp3: [Restaurant] = sortedRestaurants
@@ -439,6 +444,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                         selectedCategories.append(sortedCuisineTypeArray[index[1]])
                         selectedCategoriesString.append(sortedCuisineTypeArray[index[1]].rawValue)
                     }
+                    // "and filtering" (selected cuisine type) and (selected mealTime)
                     for category in selectedCategories {
                         selectedRestaurants1 = filteredReataurantsTemp3.filter({
                             $0.type == category
@@ -487,6 +493,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
                         selectedMealTimes.append(mealTimeArrayRestaurantType[index[1]])
                         selectedMealTimesString.append(mealTimeArrayRestaurantType[index[1]].rawValue)
                     }
+                    // "and filtering" (selected cuisine type) and (selected mealTime)
                     for mealTime in selectedMealTimes {
                         selectedRestaurants3 = filteredReataurantsTemp1.filter({
                             $0.mealTime.contains(mealTime)
@@ -509,12 +516,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         if collectionView1.indexPathsForSelectedItems!.isEmpty && collectionView3.indexPathsForSelectedItems!.isEmpty{
             filteredReataurants = sortedRestaurants
         }
+        // alphabetical order
         filteredReataurants = filteredReataurants.sorted { $0.name < $1.name }
-        print("collectionView1 \(collectionView1.indexPathsForSelectedItems!)")
-        print("collectionView3 \(collectionView3.indexPathsForSelectedItems!)")
+        // for checking
+//        print("collectionView1 \(collectionView1.indexPathsForSelectedItems!)")
+//        print("collectionView3 \(collectionView3.indexPathsForSelectedItems!)")
         collectionView2.reloadData()
     }
     
+    // The original square layout
     private func generateLayoutForRestaurants() -> UICollectionViewLayout {
         let spacing: CGFloat = 5
         // for collectionView2
@@ -536,6 +546,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
     }
     
+    // The tableView like layout
     private func linearLayoutForRestaurants() -> UICollectionViewLayout  {
         let spacing: CGFloat = 5
         // for collectionView2
