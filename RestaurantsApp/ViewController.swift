@@ -41,6 +41,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var sortedCuisineTypeArray: [Restaurant.CuisineType] = []
     var cuisineTypeStringArray: [String] = []
     
+    let mealTimeArray: [String] = ["Breakfast", "Lunch", "Dinner"]
+    
     // stackView
     let collectionViewsContainerSV: UIStackView = {
         let sv = UIStackView()
@@ -61,6 +63,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         layout.scrollDirection = .horizontal
         return cv
     }()
+    let collectionView3: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 100, height: 35)
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+        let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
+        cv.frame.size.height = layout.itemSize.height
+        layout.scrollDirection = .horizontal
+        return cv
+    }()
     let collectionView2: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let cv = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
@@ -70,6 +81,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     private let collectionView1Identifier = "CuisineTypeCell"
     private let collectionView2IdentifierGeneral = "RestaurantCellGeneral"
     private let collectionView2IdentifierLinear = "RestaurantCellLinear"
+    private let collectionView3Identifier = "MealTimeCell"
     var generalLayout: Bool = false
     var isAdvancedSearchState: Bool = false
     // searchController
@@ -105,6 +117,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         view.backgroundColor = UIColor(hex: "#d9d9d9")
         collectionView1.backgroundColor = UIColor(hex: "#d9d9d9")
         collectionView2.backgroundColor = UIColor(hex: "#d9d9d9")
+        collectionView3.backgroundColor = UIColor(hex: "#d9d9d9")
         
         // Initialize the collection views, set the desired frames
         var topbarHeight: CGFloat {
@@ -114,13 +127,16 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         collectionView1.delegate = self
         collectionView2.delegate = self
+        collectionView3.delegate = self
 
         collectionView1.dataSource = self
         collectionView2.dataSource = self
+        collectionView3.dataSource = self
         
         // Register cell classes
         collectionView1.register(CuisineTypeCollectionViewCell.self, forCellWithReuseIdentifier: collectionView1Identifier)
         collectionView2.register(BasicCollectionViewCell.self, forCellWithReuseIdentifier: collectionView2IdentifierGeneral)
+        collectionView3.register(CuisineTypeCollectionViewCell.self, forCellWithReuseIdentifier: collectionView3Identifier)
         // linearLayout
         collectionView2.register(LinearLayoutCollectionViewCell.self, forCellWithReuseIdentifier: collectionView2IdentifierLinear)
         
@@ -131,6 +147,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         // Add subviews
         self.view.addSubview(collectionViewsContainerSV)
         collectionViewsContainerSV.addArrangedSubview(collectionView1)
+        collectionViewsContainerSV.addArrangedSubview(collectionView3)
         collectionViewsContainerSV.addArrangedSubview(collectionView2)
         
         // Constraints
@@ -140,7 +157,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             collectionViewsContainerSV.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionViewsContainerSV.widthAnchor.constraint(equalTo: view.widthAnchor),
 
-            collectionView1.heightAnchor.constraint(equalToConstant: 35)
+            collectionView1.heightAnchor.constraint(equalToConstant: 35),
+            collectionView3.heightAnchor.constraint(equalToConstant: 35)
         ])
         
         // Navigation bar
@@ -154,14 +172,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "+", style: .done, target: self, action: #selector(advancedSearch))
         navigationItem.leftBarButtonItem?.tintColor = UIColor(hex: "#0047b3")
         
-        navigationItem.searchController = searchController
-        searchController.searchBar.barTintColor = UIColor(hex: "#3399ff")
-        searchController.searchBar.tintColor = UIColor(hex: "#3399ff")
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
+//        navigationItem.searchController = searchController
+//        searchController.searchBar.barTintColor = UIColor(hex: "#3399ff")
+//        searchController.searchBar.tintColor = UIColor(hex: "#3399ff")
+//        searchController.searchResultsUpdater = self
+//        searchController.obscuresBackgroundDuringPresentation = false
 //        navigationItem.searchController?.searchBar.isHidden = true
         
-        navigationItem.searchController = nil
+//        navigationItem.searchController = nil
     }
     
     @objc func advancedSearch() {
@@ -169,10 +187,20 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             // not advanced search state
             isAdvancedSearchState = false
             
+//            navigationItem.searchController = nil
+            
+            
 //            navigationItem.searchController?.searchBar.isHidden = true
         } else {
             // advanced search state
             isAdvancedSearchState = true
+            
+//            navigationItem.searchController = searchController
+//            searchController.searchBar.barTintColor = UIColor(hex: "#3399ff")
+//            searchController.searchBar.tintColor = UIColor(hex: "#3399ff")
+//            searchController.searchResultsUpdater = self
+//            searchController.obscuresBackgroundDuringPresentation = false
+//            view.layoutIfNeeded()
             
 //            navigationItem.searchController?.searchBar.isHidden = false
         }
